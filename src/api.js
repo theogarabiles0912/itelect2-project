@@ -10,7 +10,6 @@ export async function fetchSampleUsers() {
     console.log('fetchSampleUsers done');
   }
 }
-
 export function fetchSampleUsersPromise() {
   return fetch('https://jsonplaceholder.typicode.com/users')
     .then(response => response.json())
