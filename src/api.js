@@ -10,6 +10,7 @@ export async function fetchSampleUsers() {
     console.log('fetchSampleUsers done');
   }
 }
+// Hello midterms
 export function fetchSampleUsersPromise() {
   return fetch('https://jsonplaceholder.typicode.com/users')
     .then(response => response.json())
