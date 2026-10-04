@@ -23,3 +23,19 @@ PUT
 DELETE
 ![](<screenshots/DELETE Success.png>)
 ![alt text](<screenshots/Delete not found.png>)
+
+## GT 8 Testing
+GET
+![](<screenshots/GT8 Get tasks.png>)
+
+GET tasks/999
+![](<screenshots/GT 8 Get tasks/999.png>)
+
+POST
+![](<screenshots/GT 8 Post .png>)
+
+DELETE
+![](<screenshots/GT 8 Delete.png>)
+
+GET DELETE
+![](<screenshots/GT 8 Get Deleted Tasks.png>)

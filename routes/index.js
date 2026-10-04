@@ -1,5 +1,7 @@
 import { Router } from "express";
 import db from "../models/index.cjs";
+import verifyToken from "../middleware/verifyToken.cjs";
+import requireRole from "../middleware/requireRole.cjs";
 
 const { Task, User } = db;
 
@@ -49,7 +51,7 @@ router.get("/users", async (req, res, next) => {
 });
 
 // POST create task
-router.post("/tasks", async (req, res, next) => {
+router.post("/tasks", verifyToken, async (req, res, next) => {
   try {
     const task = await Task.create(req.body);
 
@@ -60,7 +62,7 @@ router.post("/tasks", async (req, res, next) => {
 });
 
 // PUT update task
-router.put("/tasks/:id", async (req, res, next) => {
+router.put("/tasks/:id", verifyToken, async (req, res, next) => {
   try {
     const task = await Task.findByPk(req.params.id);
 
@@ -77,7 +79,7 @@ router.put("/tasks/:id", async (req, res, next) => {
 });
 
 // DELETE task
-router.delete("/tasks/:id", async (req, res, next) => {
+router.delete("/tasks/:id", verifyToken, requireRole('admin'), async (req, res, next) => {
   try {
     const task = await Task.findByPk(req.params.id);
 
