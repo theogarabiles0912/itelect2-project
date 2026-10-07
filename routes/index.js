@@ -1,7 +1,15 @@
 import { Router } from "express";
-import db from "../models/index.cjs";
-
-const { Task, User } = db;
+import verifyToken from "../middleware/verifyToken.cjs";
+import requireRole from "../middleware/requireRole.cjs";
+import {
+  getAllTasks,
+  getTaskById,
+  getAllUsers,
+  createTask,
+  updateTask,
+  deleteTask
+} from "../controllers/taskController.js";
+import { register, login } from "../controllers/authController.js";
 
 const router = Router();
 
@@ -9,91 +17,18 @@ router.get("/", (req, res) => {
   res.send("API is working!");
 });
 
-// GET all tasks
-router.get("/tasks", async (req, res, next) => {
-  try {
-    const tasks = await Task.findAll({
-      include: User
-    });
+// Tasks
+router.get("/tasks", getAllTasks);
+router.get("/tasks/:id", getTaskById);
+router.post("/tasks", verifyToken, createTask);
+router.put("/tasks/:id", verifyToken, updateTask);
+router.delete("/tasks/:id", verifyToken, requireRole("admin"), deleteTask);
 
-    res.status(200).json(tasks);
-  } catch (error) {
-    next(error);
-  }
-});
+// Users
+router.get("/users", getAllUsers);
 
-// GET single task
-router.get("/tasks/:id", async (req, res, next) => {
-  try {
-    const task = await Task.findByPk(req.params.id);
-
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
-    }
-
-    res.status(200).json(task);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// GET all users
-router.get("/users", async (req, res, next) => {
-  try {
-    const users = await User.findAll();
-
-    res.status(200).json(users);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// POST create task
-router.post("/tasks", async (req, res, next) => {
-  try {
-    const task = await Task.create(req.body);
-
-    res.status(201).json(task);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// PUT update task
-router.put("/tasks/:id", async (req, res, next) => {
-  try {
-    const task = await Task.findByPk(req.params.id);
-
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
-    }
-
-    await task.update(req.body);
-
-    res.status(200).json(task);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// DELETE task
-router.delete("/tasks/:id", async (req, res, next) => {
-  try {
-    const task = await Task.findByPk(req.params.id);
-
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
-    }
-
-    await task.destroy();
-
-    res.status(200).json({
-      message: "Task deleted",
-      task
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+// Auth
+router.post("/auth/register", register);
+router.post("/auth/login", login);
 
 export default router;
