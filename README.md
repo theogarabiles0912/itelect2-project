@@ -23,3 +23,9 @@ PUT
 DELETE
 ![](<screenshots/DELETE Success.png>)
 ![alt text](<screenshots/Delete not found.png>)
+
+## Deployed Website link
+
+The project is deployed on Render and can be accessed through the following link:
+
+Deployed Website: https://itelect2-project-6ayu.onrender.com
